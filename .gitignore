@@ -5,6 +5,9 @@ keep/
 maintain
 noedit
 pageidx
+curquestion
 rc.log
-upload.log
+oldrc.log
+rc.log.old
+spammer.log
 visitors.log
