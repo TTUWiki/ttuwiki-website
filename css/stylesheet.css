@@ -1,0 +1,243 @@
+body {
+    background-color: #DDDDDD;
+    color: #282828;
+    font-family: Arial,Helvetica,sans-serif;
+    margin: 12px 0px;
+}
+
+.header, .wrapper, .footer {
+    max-width: 900px;
+    text-align: left;
+    margin: 0px auto;
+}
+
+/*.footer a {
+    white-space:nowrap;
+} */
+
+form.search {
+    float: right;
+/*    display: inline;*/
+    padding: 6px 8px 6px 35px;
+    margin-right: 5px;
+    margin-top: -5px;
+}
+
+form.search input[type="text"] {
+    background: #FCFCFC;
+    border: 1px solid #D1D1D1;
+    font: bold 12px Arial,Helvetica,Sans-serif;
+    color: #BEBEBE;
+    width: 170px;
+    padding: 6px 12px;
+    margin-right: 5px;
+    margin-top: 15px;
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
+    border-radius: 2px;
+    text-shadow: 0 2px 3px rgba(0, 0, 0, 0.1);
+    -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15) inset;
+    -moz-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15) inset;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15) inset;
+}
+
+h1 {
+    display: inline-block;
+    width: 100%;
+}
+
+h1>a.edit {
+    float: right;
+    text-decoration: none;
+    font-size: 50%;
+    font-weight: normal;
+    color: #DDDDDD;
+    box-shadow: 0px 0px 4px #999999;
+    border-radius: 2px;
+    padding: 8px;
+    background: -webkit-linear-gradient(#870042 , #6C0035); /* For Safari */
+    background: -o-linear-gradient(#870042, #6C0035); /* For Opera 11.1 to 12.0 */
+    background: -moz-linear-gradient(#870042, #6C0035); /* For Firefox 3.6 to 15 */
+    background: linear-gradient(#870042, #6C0035); /* Standard syntax */
+}
+
+h2 { margin-top: 28px; }
+h3 { font-size: 160%; }
+h4 { font-size: 140%; }
+h5 { font-size: 120%; margin-top: 0; margin-bottom: 0; }
+h6 { font-size: 100%; margin-top: 0; margin-bottom: 0; }
+
+a {
+    color: #870042;
+    text-decoration: none;
+    font-family: "Lucida Console", Monaco, monospace;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+a:active {
+    text-decoration: underline;
+}
+
+.header>.gotobar {
+    float: left;
+    font-family: Arial,Helvetica,sans-serif;
+    position: static;
+    background: -webkit-linear-gradient(#fefefe , #f1f1f1); /* For Safari */
+    background: -o-linear-gradient(#fefefe, #f1f1f1); /* For Opera 11.1 to 12.0 */
+    background: -moz-linear-gradient(#fefefe, #f1f1f1); /* For Firefox 3.6 to 15 */
+    background: linear-gradient(#fefefe , #f1f1f1); /* Standard syntax */
+    box-shadow: 0px 0px 4px #cccccc;
+    border-radius: 2px;
+    width: 100%;
+}
+
+
+.header>h1 {
+    margin-top: 32px;
+    margin-bottom: 4px;
+    position: inherit;
+}
+
+div.page h1 {
+    margin: 0px 3px;
+    font-size: 18px;
+}
+
+h3 {
+    margin-top: 28px;
+}
+
+.gotobar>a {
+    right: 0px;
+    top: 0px;
+    white-space: nowrap;
+}
+
+.header>.gotobar>a {
+    font-family: Arial,Helvetica,sans-serif;
+    font-size: 16px;
+    padding: 20px 10px 10px 10px;
+    font-weight: normal;
+    float: left;
+    margin-top: 0px !important;
+    margin-bottom: 0px !important;
+    padding-top: 20px !important;
+    padding-bottom: 20px !important;
+    
+}
+
+.header>.gotobar>a:hover {
+    text-decoration: none;
+    background: -webkit-linear-gradient(#f2f2f2 , #d8d8d8);
+    background: -o-linear-gradient(#f2f2f2, #d8d8d8);
+    background: -moz-linear-gradient(#f2f2f2, #d8d8d8);
+    background: linear-gradient(#f2f2f2, #d8d8d8);
+} 
+
+.local {
+    height: 100%;
+}
+
+input, textarea { 
+    color: #282828;
+    background-color: #CCCCCC;
+    border-style: solid;
+    border-color: #666666;
+    border-width: 1px;
+    font-family: Arial,Helvetica,sans-serif;
+}
+
+.header form input {
+    font-size: 18px;
+    background-color: #EAEAEA;
+    border-color: #BBBBBB;
+    padding: 0px;
+    border-radius:1px;
+}
+
+.footer span.edit a {
+    margin-right: 25px;
+}
+
+.footer br {
+    margin-bottom: 5px;
+}
+
+input {
+    font-size:95%;
+}
+
+table.user {
+    border-collapse: collapse;
+}
+
+table.user tr td {
+    border: 1px solid #777777;
+    padding: 3px;
+    margin: 0px;
+}
+
+.homepage {
+    display: none;
+}
+
+a.number {
+    font-size: 60%;
+    vertical-align: top;
+}
+
+li {
+    margin: 4px 0px;
+}
+
+p.comment {
+    margin: 50px 0px 0px 0px;
+}
+
+.page p.comment {
+    margin: 0px 0px 0px 0px;
+}
+
+.footer>form.search, div.footer span.gotobar, div.footer span.edit>br {
+    display:none;
+}
+
+code {
+    font-size: 16px;
+    font-family: "Lucida Console", Monaco, monospace;
+}
+
+.rc>p a {
+    padding: 0px 10px;
+}
+
+div.page {
+    background-color: #CCCCCC;
+    border-color: #BBBBBB;
+    border-radius: 1px;
+    padding: 10px;
+    margin: 20px 0px;
+    font-size: 100%;
+/*    font-weight: bold;*/
+}
+
+div.page>hr {
+    counter-increment: commentscount;
+}
+
+div.page p.comment:after {
+    content: " (" counter(commentscount) ")";
+}
+
+div.page>hr , div.page>hr:first-of-type~*:not(.comment) {
+    visibility: hidden;
+    position: absolute;
+}
+
+.more {
+    margin-top: 6px;
+    margin-bottom: 35px;
+}
