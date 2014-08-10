@@ -73,99 +73,11 @@ sub GetSearchForm {
 sub GetHeaderTitle {
   my ($id, $title, $oldId) = @_;
   return $q->h1($title) if $id eq '';
-  return $q->h1((UserCanEdit($id, 0) and $id ne $AskPage ? GetEditLink($id, T('Edit this page'), undef, T('e')) : '') .
+  return $q->h1(((UserCanEdit($id, 0) and $id ne $AskPage) ? GetEditLink($id, T('Edit this page'), undef, T('e')) : '') .
 		GetSearchLink($id, '', '', T('Click to search for references to this page')));
-}
-
-#*OldGetCommentForm=*GetCommentForm;
-#*GetCommentForm=*NewGetCommentForm;
-sub GetCommentForm {
-    my ($id, $rev, $comment) = @_;
-    if ($CommentsPrefix ne '' and $id and $rev ne 'history' and $rev ne 'edit'
-        and $id =~ /^$CommentsPrefix/o and UserCanEdit($id, 0, 1)) {
-        return $q->div({-class=>'comment'},
-                       $q->start_multipart_form(-method=>'post', -action=>$FullUrl, -accept_charset=>'utf-8', -class=>'comment', -onsubmit=>'return disableFileUpload()'), #GetFormStart(undef, undef, 'comment'), # protected by questionasker
-                       $q->p(GetHiddenValue('title', $id),
-                             $id ne $AskPage ? $q->p({-class=>'comment'}, $q->label({-class=>'comment'}, $NewComment)) : '',
-                             GetTextArea('aftertext', $comment ? $comment : '', 10)), $EditNote,
-                       GetUploadForm(),
-                       $q->p($q->span({-class=>'username'},
-                                      $q->label({-for=>'username'}, T('Username:')), ' ',
-                                      $q->textfield(-name=>'username', -id=>'username',
-                                                    -default=>GetParam('username', ''),
-                                                    -override=>1, -size=>20, -maxlength=>50)),
-                             $q->span({-class=>'homepage'},
-                                      $q->label({-for=>'homepage'}, T('Homepage URL:')), ' ',
-                                      $q->textfield(-name=>'homepage', -id=>'homepage',
-                                                    -default=>GetParam('homepage', ''),
-                                                    -override=>1, -size=>40, -maxlength=>100))), ' ',
-                       $q->p($q->submit(-name=>'Save', -accesskey=>T('s'), -value=>T('Save')), ' ',
-                             $q->submit(-name=>'Preview', -accesskey=>T('p'), -value=>T('Preview'))),
-                       $q->endform());
-    }
-    return '';
-}
-
-sub GetEditForm {
-    my ($page_name, $upload, $oldText, $revision) = @_;
-    my $html = GetFormStart(undef, undef, $upload ? 'edit upload' : 'edit text') # protected by questionasker
-        .$q->p(GetHiddenValue("title", $page_name), ($revision ? GetHiddenValue('revision', $revision) : ''),
-               GetHiddenValue('oldtime', $Page{ts}), ($upload ? GetUpload() : GetTextArea('text', $oldText))) . GetUploadForm();
-    my $summary = UnquoteHtml(GetParam('summary', ''))
-        || ($Now - $Page{ts} < ($SummaryHours * 3600) ? $Page{summary} : '');
-    $html .= $q->p(T('Summary:').$q->br().GetTextArea('summary', $summary, 2))
-        .$q->p($q->checkbox(-name=>'recent_edit', -checked=>(GetParam('recent_edit', '') eq 'on'),
-                            -label=>T('This change is a minor edit.')));
-    $html .= T($EditNote) if $EditNote; # Allow translation
-    my $username = GetParam('username', '');
-    $html .= $q->p($q->label({-for=>'username'}, T('Username:')).' '
-                   .$q->textfield(-name=>'username', -id=>'username', -default=>$username,
-                                  -override=>1, -size=>20, -maxlength=>50))
-        .$q->p($q->submit(-name=>'Save', -accesskey=>T('s'), -value=>T('Save')),
-               ($upload ? '' : ' ' . $q->submit(-name=>'Preview', -accesskey=>T('p'), -value=>T('Preview'))).
-               ' '.$q->submit(-name=>'Cancel', -value=>T('Cancel')));
-    if ($upload) {
-        $html .= $q->p(ScriptLink('action=edit;upload=0;id='.UrlEncode($page_name), T('Replace this file with text'),   'upload'));
-    }
-    elsif ($UploadAllowed or UserIsAdmin()) {
-        $html .= $q->p(ScriptLink('action=edit;upload=1;id='.UrlEncode($page_name), T('Replace this text with a file'), 'upload'));
-    }
-    $html .= $q->endform();
-    return $html;
-}
-
-sub GetUploadForm {
-    return $q->span({-class=>'upload'}, $q->label({-for=>'fileToUpload'}, T('Attach file:')),
-                    $q->filefield(-name=>'fileToUpload', -id=>'fileToUpload', -multiple=>'multiple', -onChange=>'fileSelected()', -size=>20),
-                    $q->span({-id=>'fileSize'}, ''),
-                    $q->button(-name=>'uploadButton', -value=>T('Upload'), -onClick=>'uploadFile()'),
-                    $q->span({-id=>'progressNumber'}));
 }
 
 sub PrintPageCommentsLink {
   my ($id, $comments) = @_;
   print $q->p({-class=>'comment'}, GetPageLink($id, T('Comments on this page')));
-}
-
-$HtmlHeaders = '<script type="text/javascript" src="/js/uploader.js"></script>';
-
-# TODO do not use this? Opening links in new windows is evil
-push(@MyRules, \&NewWindowLink);
-sub NewWindowLink {
-    # compare sub LinkRules in oddmuse.pl
-    if ($BracketText && m/\G(\[new:$FullUrlPattern\s+([^\]]+?)\])/cog
-        or m/\G(\[new:$FullUrlPattern\])/cog)
-    {
-        my ($url, $text) = ($2, $3);
-        $url =~ /^($UrlProtocols)/;
-        my $class = "url $1";      # get protocol (http, ftp, ...)
-        $text = $url unless $text; # use url as link text if text empty
-        $url = UnquoteHtml($url);  # quote special chars
-        $class .= ' newwindow';    # add newwindow to class
-        # output link
-        my $link = $q->a({-href=>$url, -class=>$class, -target=>"_new"}, $text);
-        Clean($link); # ?!
-        return '';
-    }
-    return undef;
 }

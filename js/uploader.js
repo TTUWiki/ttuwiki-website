@@ -37,13 +37,15 @@ function uploadFile() {
             var curFile = files[i];
             fd.append('fileToUpload' + i, files[i]);
         }
+	fd.append('key', '7771d3a2f8aa9de13df6');
+	fd.append('nameOnly', '1');
 
         var xhr = new XMLHttpRequest();
         xhr.upload.addEventListener('progress', uploadProgress, false);
         xhr.addEventListener('load', uploadComplete, false);
         xhr.addEventListener('error', uploadFailed, false);
         xhr.addEventListener('abort', uploadCanceled, false);
-        xhr.open('POST', '/cgi-bin/upload.pl');
+        xhr.open('POST', 'http://files.ttuwiki.org/cgi-bin/upload.pl');
         xhr.send(fd);
     } else
         addFile(lastFiles);
@@ -81,7 +83,8 @@ function uploadProgress(evt) {
 function uploadComplete(evt) {
     lastFiles = evt.target.responseText;
     document.getElementById('progressNumber').innerHTML = '100%';
-    addFiles(evt.target.responseText)
+    addFiles(evt.target.responseText);
+    document.getElementById('fileToUpload').value = ''; // TODO do that on Save instead?
 }
 
 function uploadFailed(evt) {
