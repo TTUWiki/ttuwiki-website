@@ -224,7 +224,7 @@ div.page {
 /*    font-weight: bold;*/
 }
 
-div.page>hr {
+div.page>.userComment {
     counter-increment: commentscount;
 }
 
@@ -232,12 +232,28 @@ div.page p.comment:after {
     content: " (" counter(commentscount) ")";
 }
 
-div.page>hr , div.page>hr:first-of-type~*:not(.comment) {
+/*div.page>hr , div.page>hr:first-of-type~*:not(.comment) { */
+div.page>.userComment, div.page>#commentsHeading {
     visibility: hidden;
     position: absolute;
+    top: -9999px;
+    left: -9999px;
+}
+
+#commentsHeading {
+    margin-top: 50px;
+}
+
+.userComment {
+    background-color: #CCCCCC;
+    padding: 1px 15px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    width: 70%;
+    border-radius: 3px;
 }
 
 .more {
-    margin-top: 6px;
+    margin-top: 1px;
     margin-bottom: 35px;
 }

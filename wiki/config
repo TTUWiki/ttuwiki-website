@@ -31,6 +31,7 @@ $NewComment = "Ваш комментарий:";
 $Translate{'Attach file:'} = 'Прикрепить файл:';
 $Translate{'Upload'} = 'Загрузить';
 $Translate{'Journal'} = ' ';
+$Translate{'Comments:'} = 'Комментарии:';
 
 $FullUrl = ($ENV{'HTTPS'} ? 'https' : 'http') . '://ttuwiki.org';
 $ScriptName = ($ENV{'HTTPS'} ? 'https' : 'http') . '://ttuwiki.org';
