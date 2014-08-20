@@ -257,3 +257,11 @@ div.page>.userComment, div.page>#commentsHeading {
     margin-top: 1px;
     margin-bottom: 35px;
 }
+
+.old, .diffactionold {
+    background-color: #e2bcbc;
+}
+
+.new, .diffactionnew {
+    background-color: #bce2bc;
+}
