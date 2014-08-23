@@ -258,10 +258,10 @@ div.page>.userComment, div.page>#commentsHeading {
     margin-bottom: 35px;
 }
 
-.old, .diffactionold {
+.old, .diffactionold, .updaterold {
     background-color: #e2bcbc;
 }
 
-.new, .diffactionnew {
+.new, .diffactionnew, .updaternew {
     background-color: #bce2bc;
 }
