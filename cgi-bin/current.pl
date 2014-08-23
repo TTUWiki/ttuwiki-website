@@ -1631,7 +1631,7 @@ sub RcHeader {
   } else {
     $html .= $q->h2((GetParam('days', $RcDefault) != 1)
 		    ? Ts('Updates in the last %s days', $days)
-		    : Ts('Updates in the las %s day',  $days));
+		    : Ts('Updates in the last %s day',  $days));
   }
   my $action = '';
   my ($idOnly, $userOnly, $hostOnly, $clusterOnly, $filterOnly,
@@ -1782,7 +1782,7 @@ sub RcHtml {
   ProcessRcLines($printDailyTear, $printRCLine);
   $html .= '</ul>' if $inlist;
   # use delta between from and upto, or use days, whichever is available
-  my $to = GetParam('from', GetParam('upto', $Now - GetParam('days') * 86400));
+  my $to = GetParam('from', GetParam('upto', $Now - GetParam('days', $RcDefault) * 86400));
   my $from = $to - (GetParam('upto') ? GetParam('upto') - GetParam('from') : GetParam('days', $RcDefault) * 86400);
   my $more = "action=rc;from=$from;upto=$to";
   foreach (qw(all showedit rollback rcidonly rcuseronly rchostonly
@@ -2292,7 +2292,7 @@ sub GetHtmlHeader {   # always HTML!
   my $base = $SiteBase ? $q->base({-href=>$SiteBase}) : '';
   $base .= '<link rel="alternate" type="application/wiki" title="'
     . T('Edit this page') . '" href="'
-    . ScriptUrl('action=edit;id=' . UrlEncode(GetId())) . '" />' if $id;
+    . ScriptUrl('action=edit;id=' . UrlEncode($id)) . '" />' if $id;
   return $DocumentHeader
     . $q->head($q->title($title) . $base
       . GetCss() . GetRobots() . GetFeeds() . $HtmlHeaders
@@ -2537,9 +2537,9 @@ sub DoDiff {      # Actualy call the diff program
   RequestLockDir('diff') or return '';
   WriteStringToFile($oldName, $_[0]);
   WriteStringToFile($newName, $_[1]);
-  my $diff_out = `diff \Q$oldName\E \Q$newName\E`;
+  my $diff_out = `diff -- \Q$oldName\E \Q$newName\E`;
   utf8::decode($diff_out); # needs decoding
-  $diff_out =~ s/\\ No newline.*\n//g; # Get rid of common complaint.
+  $diff_out =~ s/\n\K\\ No newline.*\n//g; # Get rid of common complaint.
   ReleaseLockDir('diff');
   # No need to unlink temp files--next diff will just overwrite.
   return $diff_out;
@@ -2849,10 +2849,13 @@ sub RequestLockDir {
 	return 1 if RequestLockDir($name, undef, undef, undef, 1);
       }
       return 0 unless $error;
-      ReportError(Ts('Could not get %s lock', $name) . ": $!. "
-      . Ts('The lock was created %s.', CalcTimeSince($Now - $ts))
-      . ($retried ? ' ' . T('Maybe the user running this script is no longer allowed to remove the lock directory?') : ''),
-      '503 SERVICE UNAVAILABLE');
+      my $unlock = ScriptLink('action=unlock', T('unlock the wiki'), 'unlock');
+      ReportError(Ts('Could not get %s lock', $name) . ": $!. ",
+        '503 SERVICE UNAVAILABLE', undef,
+        Ts('The lock was created %s.', CalcTimeSince($Now - $ts))
+	. ($retried ? ' ' . T('Maybe the user running this script is no longer allowed to remove the lock directory?') : '')
+        . ' ' . qq{Sometimes locks are left behind if a job crashes.}
+	. ' ' . qq{After ten minutes, you could try to $unlock.});
     }
     sleep($wait);
   }
@@ -3698,7 +3701,7 @@ sub MergeRevisions {   # merge change from file2 to file3 into file1
   WriteStringToFile($name2, $file2);
   WriteStringToFile($name3, $file3);
   my ($you, $ancestor, $other) = (T('you'), T('ancestor'), T('other'));
-  my $output = `diff3 -m -L \Q$you\E -L \Q$ancestor\E -L \Q$other\E \Q$name1\E \Q$name2\E \Q$name3\E`;
+  my $output = `diff3 -m -L \Q$you\E -L \Q$ancestor\E -L \Q$other\E -- \Q$name1\E \Q$name2\E \Q$name3\E`;
   ReleaseLockDir('merge'); # don't unlink temp files--next merge will just overwrite.
   return $output;
 }
@@ -3926,6 +3929,13 @@ sub WriteRecentVisitors {
 }
 
 sub TextIsFile { $_[0] =~ /^#FILE (\S+) ?(\S+)?\n/ }
+
+sub AddModuleDescription {
+  my ($filename, $name) = @_;
+  $ModulesDescription .= '<p><a href="http://git.savannah.gnu.org/cgit/oddmuse.git/tree/modules/' . UrlEncode($filename) . '">' . QuoteHtml($filename);
+  $ModulesDescription .= '</a>, see <a href="http://www.oddmuse.org/cgi-bin/oddmuse/' . UrlEncode(FreeToNormal($name)) . '">' . QuoteHtml($name) if $name;
+  $ModulesDescription .= '</a></p>';
+}
 
 DoWikiRequest() if $RunCGI and not exists $ENV{MOD_PERL}; # Do everything.
 1; # In case we are loaded from elsewhere
