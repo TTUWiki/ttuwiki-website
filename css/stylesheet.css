@@ -61,7 +61,12 @@ h1>a.edit {
     background: linear-gradient(#870042, #6C0035); /* Standard syntax */
 }
 
-h2 { margin-top: 28px; }
+.subtitle {
+    margin-top: 5px;
+    font-size: 160%;
+    font-weight: bold;
+}
+
 h3 { font-size: 160%; }
 h4 { font-size: 140%; }
 h5 { font-size: 120%; margin-top: 0; margin-bottom: 0; }
