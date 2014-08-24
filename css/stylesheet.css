@@ -267,6 +267,10 @@ div.page>.userComment, div.page>#commentsHeading {
     background-color: #e2bcbc;
 }
 
+.diffactionold *, .diffactionnew * {
+    display: inline;
+}
+
 .new, .diffactionnew, .updaternew {
     background-color: #bce2bc;
 }
