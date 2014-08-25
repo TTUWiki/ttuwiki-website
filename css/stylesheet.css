@@ -278,3 +278,8 @@ div.page>.userComment, div.page>#commentsHeading {
 .new, .diffactionnew, .updaternew {
     background-color: #bce2bc;
 }
+
+#aftertext {
+    width: 570px;
+    height: 175px;
+}
