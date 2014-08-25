@@ -17,6 +17,7 @@ $MaxPost = 430080;
 $HomePage = 'Главная';
 $RCName = 'Последние изменения';
 @UserGotoBarPages = ($HomePage, 'Расписания', 'Полезное', $AskPage, $RCName); # not required anymore?
+#$SurgeProtection = '';
 $SurgeProtectionViews = 20;
 
 $GitMail = 'anybody@ttuwiki.org';
