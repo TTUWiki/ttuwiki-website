@@ -83,3 +83,16 @@ sub PrintPageCommentsLink {
   my ($id, $comments) = @_;
   print $q->p({-class=>'comment'}, GetPageLink($id, T('Comments on this page')));
 }
+
+@QuestionaskerQuestions = (
+  ['О каком университете этот сайт? Напишите три буквы.' => sub { shift =~ /TT[UuÜü]|[Тт][Тт][Уу]/i }] # XXX will /i handle non-ascii characters here?
+);
+
+use Geo::IP;
+
+*OldQuestionaskerException = *QuestionaskerException;
+*QuestionaskerException = *NewQuestionaskerException;
+sub NewQuestionaskerException {
+  return 1 if Geo::IP->new()->country_code_by_addr($ENV{REMOTE_ADDR}) eq 'EE';
+  return OldQuestionaskerException(@_);
+}
