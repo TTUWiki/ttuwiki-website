@@ -29,7 +29,7 @@
 
 package OddMuse;
 use strict;
-use CGI;
+use CGI qw/-utf8/;
 use CGI::Carp qw(fatalsToBrowser);
 use File::Glob ':glob';
 local $| = 1; # Do not buffer output (localized for mod_perl)
@@ -324,9 +324,8 @@ sub ReInit {   # init everything we need if we want to link to stuff
 sub InitCookie {
   undef $q->{'.cookies'};   # Clear cache if it exists (for SpeedyCGI)
   my $cookie = $q->cookie($CookieName);
-  utf8::decode($cookie); # make sure it's decoded as UTF-8
   %OldCookie = split(/$FS/o, UrlDecode($cookie));
-  my %provided = map { utf8::decode($_); $_ => 1 } $q->param;
+  my %provided = map { $_ => 1 } $q->param;
   for my $key (keys %OldCookie) {
     SetParam($key, $OldCookie{$key}) unless $provided{$key};
   }
@@ -362,10 +361,8 @@ sub CookieRollbackFix {
 
 sub GetParam {
   my ($name, $default) = @_;
-  utf8::encode($name); # may fail
   my $result = $q->param($name);
   $result //= $default;
-  utf8::decode($result) if defined $result; # may fail, avoid turning undef to ''
   return QuoteHtml($result); # you need to unquote anything that can have <tags>
 }
 
@@ -1716,7 +1713,7 @@ sub GetFilterForm {
 					    -default=>GetParam('lang', ''))));
   }
   return GetFormStart(undef, 'get', 'filter') . $q->p($form) . $q->table($table)
-    . $q->p($q->submit('dofilter', T('Go!'))) . $q->endform;
+    . $q->p($q->submit('dofilter', T('Go!'))) . $q->end_form;
 }
 
 sub RcHtml {
@@ -1791,7 +1788,7 @@ sub RcHtml {
     $more .= ";$_=$val" if $val;
   }
   $html .= $q->p({-class=>'more'}, ScriptLink($more, T('More...'), 'more'));
-  return GetFormStart(undef, 'get', 'rc') . $html . $q->endform;
+  return GetFormStart(undef, 'get', 'rc') . $html . $q->end_form;
 }
 
 sub PrintRcHtml { # to append RC to existing page, or action=rc directly
@@ -2276,7 +2273,6 @@ sub Cookie {
   my ($changed, $visible, %params) = CookieData(); # params are URL encoded
   if ($changed) {
     my $cookie = join(UrlEncode($FS), %params); # no CTL in field values
-    utf8::encode($cookie); # prevent casting to Latin 1
     my $result = $q->cookie(-name=>$CookieName, -value=>$cookie, -expires=>'+2y');
     if ($visible) {
       $Message .= $q->p(T('Cookie: ') . $CookieName . ', '
@@ -2442,7 +2438,7 @@ sub GetCommentForm {
 				    -override=>1, -size=>40, -maxlength=>100))),
        $q->p($q->submit(-name=>'Save', -accesskey=>T('s'), -value=>T('Save')), ' ',
        $q->submit(-name=>'Preview', -accesskey=>T('p'), -value=>T('Preview'))),
-       $q->endform());
+       $q->end_form());
   }
   return '';
 }
@@ -2470,7 +2466,7 @@ sub GetSearchForm {
 		      -default=>GetParam('lang', '')) . ' ';
   }
   return GetFormStart(undef, 'get', 'search')
-    . $q->p($form . $q->submit('dosearch', T('Go!'))) . $q->endform;
+    . $q->p($form . $q->submit('dosearch', T('Go!'))) . $q->end_form;
 }
 
 sub GetValidatorLink {
@@ -3041,7 +3037,7 @@ sub GetEditForm {
   } elsif ($UploadAllowed or UserIsAdmin()) {
     $html .= $q->p(ScriptLink('action=edit;upload=1;id=' . UrlEncode($page_name), T('Replace this text with a file'), 'upload'));
   }
-  $html .= $q->endform();
+  $html .= $q->end_form();
   return $html;
 }
 
@@ -3093,7 +3089,7 @@ sub DoPassword {
     print GetFormStart(undef, undef, 'password'),
       $q->p(GetHiddenValue('action', 'password'), T('Password:'), ' ',
       $q->password_field(-name=>'pwd', -size=>20, -maxlength=>50),
-      $q->submit(-name=>'Save', -accesskey=>T('s'), -value=>T('Save'))), $q->endform;
+      $q->submit(-name=>'Save', -accesskey=>T('s'), -value=>T('Save'))), $q->end_form;
   } else {
     print $q->p(T('This site does not use admin or editor passwords.'));
   }
