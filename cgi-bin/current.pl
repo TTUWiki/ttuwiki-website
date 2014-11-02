@@ -29,6 +29,7 @@
 
 package OddMuse;
 use strict;
+use utf8; # in case anybody ever addes UTF8 characters to the source
 use CGI qw/-utf8/;
 use CGI::Carp qw(fatalsToBrowser);
 use File::Glob ':glob';
@@ -214,7 +215,8 @@ sub ReportError {   # fatal!
 }
 
 sub Init {
-  binmode(STDOUT, ':utf8');
+  binmode(STDOUT, ':utf8'); # this is where the HTML gets printed
+  binmode(STDERR, ':utf8'); # just in case somebody prints debug info to stderr
   InitDirConfig();
   $FS = "\x1e"; # The FS character is the RECORD SEPARATOR control char in ASCII
   $Message = ''; # Warnings and non-fatal errors.
@@ -361,6 +363,7 @@ sub CookieRollbackFix {
 
 sub GetParam {
   my ($name, $default) = @_;
+  utf8::encode($name); # turn to byte string
   my $result = $q->param($name);
   $result //= $default;
   return QuoteHtml($result); # you need to unquote anything that can have <tags>
@@ -1260,11 +1263,13 @@ sub PageHtml {
   local *STDOUT;
   OpenPage($id);
   open(STDOUT, '>', \$diff) or die "Can't open memory file: $!";
+  binmode(STDOUT); # works whether STDOUT already has the UTF8 layer or not
   binmode(STDOUT, ":utf8");
   PrintPageDiff();
   utf8::decode($diff);
   return $error if $limit and length($diff) > $limit;
   open(STDOUT, '>', \$page) or die "Can't open memory file: $!";
+  binmode(STDOUT); # works whether STDOUT already has the UTF8 layer or not
   binmode(STDOUT, ":utf8");
   PrintPageHtml();
   utf8::decode($page);
@@ -1453,7 +1458,7 @@ sub PageFresh { # pages can depend on other pages (ie. last update), admin statu
 
 sub PageEtag {
   my ($changed, $visible, %params) = CookieData();
-  return UrlEncode(join($FS, $LastUpdate, sort(values %params))); # no CTL in field values
+  return UrlEncode(join($FS, $LastUpdate||$Now, sort(values %params))); # no CTL in field values
 }
 
 sub FileFresh { # old files are never stale, current files are stale when the page was modified
@@ -2235,11 +2240,17 @@ sub GetHeaderTitle {
 sub GetHttpHeader {
   return if $PrintedHeader;
   $PrintedHeader = 1;
-  my ($type, $ts, $status, $encoding) = @_; # $ts is undef, a ts, or 'nocache'
+  my ($type, $ts, $status, $encoding) = @_;
   $q->charset($type =~ m!^(text/|application/xml)! ? 'utf-8' : ''); # text/plain, text/html, application/xml: UTF-8
   my %headers = (-cache_control=>($UseCache < 0 ? 'no-cache' : 'max-age=10'));
-  $headers{-etag} = $ts || PageEtag() if GetParam('cache', $UseCache) >= 2;
-  $headers{'-last-modified'} = TimeToRFC822($ts) if $ts and $ts ne 'nocache'; # RFC 2616 section 13.3.4
+  # Set $ts when serving raw content that cannot be modified by cookie parameters; or 'nocache'; or undef. If you
+  # provide a $ts, the last-modiefied header generated will by used by HTTP/1.0 clients. If you provide no $ts, the etag
+  # header generated will be used by HTTP/1.1 clients. In this situation, cookie parameters can influence the look of
+  # the page and we cannot rely on $LastUpdate. HTTP/1.0 clients will ignore etags. See RFC 2616 section 13.3.4.
+  if (GetParam('cache', $UseCache) >= 2 and $ts ne 'nocache') {
+    $headers{'-last-modified'} = TimeToRFC822($ts) if $ts;
+    $headers{-etag} = PageEtag();
+  }
   $headers{-type} = GetParam('mime-type', $type);
   $headers{-status} = $status if $status;
   $headers{-Content_Encoding} = $encoding if $encoding;
@@ -3055,19 +3066,18 @@ sub DoDownload {
   OpenPage($id) if ValidIdOrDie($id);
   print $q->header(-status=>'304 NOT MODIFIED') and return if FileFresh(); # FileFresh needs an OpenPage!
   my ($text, $revision) = GetTextRevision(GetParam('revision', '')); # maybe revision reset!
-  my $ts = $Page{ts};
   if (my ($type, $encoding) = TextIsFile($text)) {
     my ($data) = $text =~ /^[^\n]*\n(.*)/s;
     my %allowed = map {$_ => 1} @UploadTypes;
     if (@UploadTypes and not $allowed{$type}) {
       ReportError(Ts('Files of type %s are not allowed.', $type), '415 UNSUPPORTED MEDIA TYPE');
     }
-    print GetHttpHeader($type, $ts, undef, $encoding);
+    print GetHttpHeader($type, $Page{ts}, undef, $encoding);
     require MIME::Base64;
     binmode(STDOUT, ":pop:raw"); # need to pop utf8 for Windows users!?
     print MIME::Base64::decode($data);
   } else {
-    print GetHttpHeader('text/plain', $ts);
+    print GetHttpHeader('text/plain', $Page{ts});
     print $text;
   }
 }
