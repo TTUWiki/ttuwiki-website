@@ -98,7 +98,7 @@ $LogoUrl     = '';              # URL for site logo ('' for no logo)
 $NotFoundPg  = '';              # Page for not-found links ('' for blank pg)
 
 $NewText     = T('This page is empty.') . "\n";    # New page text
-$NewComment  = T('Add your comment here:') . "\n"; # New comment text
+$NewComment  = T('Add your comment here:'); # New comment text
 
 $EditAllowed = 1;               # 0 = no, 1 = yes, 2 = comments pages only, 3 = comments only
 $AdminPass //= '';              # Whitespace separated passwords.
@@ -2091,11 +2091,20 @@ sub DoAdminPage {
   my @menu = ();
   push(@menu, ScriptLink('action=index',    T('Index of all pages'), 'index')) if $Action{index};
   push(@menu, ScriptLink('action=version',  T('Wiki Version'),     'version')) if $Action{version};
-  push(@menu, ScriptLink('action=unlock',   T('Unlock Wiki'),       'unlock')) if $Action{unlock};
-  push(@menu, ScriptLink('action=password', T('Password'),        'password')) if $Action{password};
+  push(@menu, ScriptLink('action=password', T('Password'), 'password')) if $Action{password};
   push(@menu, ScriptLink('action=maintain', T('Run maintenance'), 'maintain')) if $Action{maintain};
+  my @locks;
+  for my $pattern (@KnownLocks) {
+    for my $name (bsd_glob $pattern) {
+      if (-d $LockDir . $name) {
+	push(@locks, $name);
+      }
+    }
+  }
+  if (@locks and $Action{unlock}) {
+    push(@menu, ScriptLink('action=unlock', T('Unlock Wiki'), 'unlock') . ' (' . join(', ', @locks) . ')');
+  };
   if (UserIsAdmin()) {
-    push(@menu, ScriptLink('action=clear', T('Clear Cache'), 'clear')) if $Action{clear};
     if ($Action{editlock}) {
       if (-f "$DataDir/noedit") {
 	push(@menu, ScriptLink('action=editlock;set=0', T('Unlock site'), 'editlock 0'));
@@ -2113,6 +2122,7 @@ sub DoAdminPage {
 			       Ts('Lock %s',   $title), 'pagelock 1'));
       }
     }
+    push(@menu, ScriptLink('action=clear', T('Clear Cache'), 'clear')) if $Action{clear};
   }
   foreach my $sub (@MyAdminCode) {
     &$sub($id, \@menu, \@rest);
@@ -3516,7 +3526,7 @@ sub DoPost {
   }
   my $comment = UnquoteHtml(GetParam('aftertext', undef));
   $comment =~ s/(\r|$FS)//go;
-  if (defined($comment) and (not $comment or $comment eq $NewComment)) {
+  if (defined $comment and $comment eq '') {
     ReleaseLock();
     ReBrowsePage($id);
   }
@@ -3630,7 +3640,7 @@ sub AddComment {
   my ($string, $comment) = @_;
   $comment =~ s/\r//g;    # Remove "\r"-s (0x0d) from the string
   $comment =~ s/\s+$//g;  # Remove whitespace at the end
-  if ($comment ne '' and $comment ne $NewComment) {
+  if ($comment ne '') {
     my $author = GetParam('username', T('Anonymous'));
     my $homepage = GetParam('homepage', '');
     $homepage = 'http://' . $homepage if $homepage and $homepage !~ /^($UrlProtocols):/;
