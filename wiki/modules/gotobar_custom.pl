@@ -37,7 +37,6 @@ sub GotobarInit {
         # links for unsuspecting users.
         @UserGotoBarPages = ();
         $UserGotoBar = '';
-        $UserGotoBar .= GetSearchForm();
         my $count = 0;
         while ($Page{text} =~ m/($LinkPattern|\[\[$FreeLinkPattern\]\]|\[\[$FreeLinkPattern\|([^\]]+)\]\]|\[$InterLinkPattern\s+([^\]]+?)\])/og) {
             my $page = $2||$3||$4||$6;
