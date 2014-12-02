@@ -86,7 +86,7 @@ a:active {
     text-decoration: underline;
 }
 
-.header>.gotobar {
+.header>.menu {
     float: left;
     font-family: Arial,Helvetica,sans-serif;
     position: static;
@@ -121,7 +121,7 @@ h3 {
     white-space: nowrap;
 }
 
-.header>.gotobar>a {
+.menu a {
     font-family: Arial,Helvetica,sans-serif;
     font-size: 16px;
     padding: 20px 10px 10px 10px;
@@ -133,7 +133,7 @@ h3 {
     padding-bottom: 20px !important;
 }
 
-.header>.gotobar>a:hover {
+.menu a:hover {
     text-decoration: none;
     background: -webkit-linear-gradient(#f2f2f2 , #d8d8d8);
     background: -o-linear-gradient(#f2f2f2, #d8d8d8);
@@ -166,7 +166,7 @@ select {
     border-radius:1px;
 }
 
-.footer span.edit a {
+.footer .edit a {
     margin-right: 25px;
 }
 
