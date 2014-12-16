@@ -3895,8 +3895,7 @@ sub DoDebug {
 
 sub DoSurgeProtection {
   return unless $SurgeProtection;
-  my $name = GetParam('username', '');
-  $name = GetRemoteHost() if not $name and $SurgeProtection;
+  my $name = GetParam('username', GetRemoteHost());
   return unless $name;
   ReadRecentVisitors();
   AddRecentVisitor($name);
