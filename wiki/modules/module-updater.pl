@@ -59,24 +59,24 @@ sub ModuleUpdaterApply {
   for (bsd_glob("$TempDir/*.p[ml]")) {
     my $moduleName = fileparse($_);
     if (move($_, "$ModuleDir/$moduleName")) {
-      print $q->strong(Ts('Module %s updated successfully!', $moduleName)), $q->br();
+      print $q->strong("Module $moduleName updated successfully!"), $q->br();
     } else {
-      print $q->strong(Ts('Unable to replace module %s: ', $moduleName) . $!), $q->br();
+      print $q->strong("Unable to replace module $moduleName: $!"), $q->br();
     }
   }
   unlink bsd_glob("$TempDir/*.p[ml]"); # XXX same as above
-  print $q->br(), $q->strong(T('Done!'));
+  print $q->br(), $q->strong('Done!');
 }
 
-sub ProcessModule() {
+sub ProcessModule {
   my $module = shift;
   CreateDir($TempDir);
   print $q->hr();
-  print $q->strong(Ts('Diffing %s ...', $module)), $q->br();
+  print $q->strong("Diffing $module ..."), $q->br();
   my $moduleData = GetRaw("$OddmuseModulesUrl/$module");
   if (not $moduleData) {
-    print $q->strong(T('There was an error downloading this module.')
-		     . ' ' . T('If this is your own module, please contribute it to Oddmuse!')), $q->br();
+    print $q->strong('There was an error downloading this module.'
+		     . ' If this is your own module, please contribute it to Oddmuse!'), $q->br();
     return;
   }
   open my $fh, ">", "$TempDir/$module" or die("Could not open file. $!");
@@ -85,11 +85,11 @@ sub ProcessModule() {
 
   my $diff = DoModuleDiff("$ModuleDir/$module", "$TempDir/$module");
   if (not $diff) {
-    print $q->strong(T('This module is up to date, there is no need to update it.')), $q->br();
+    print $q->strong('This module is up to date, there is no need to update it.'), $q->br();
     unlink "$TempDir/$module";
     return;
   }
-  print $q->strong(T('There is a newer version of this module. Here is a diff:')), $q->br();
+  print $q->strong('There is a newer version of this module. Here is a diff:'), $q->br();
 
   $diff = QuoteHtml($diff);
   $diff =~ tr/\r//d; # TODO is this required? # probably not # but maybe it is there to fix problems with dos newlines?
