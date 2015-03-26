@@ -11,13 +11,8 @@ body {
     margin: 0px auto;
 }
 
-/*.footer a {
-    white-space:nowrap;
-} */
-
 form.search {
     float: right;
-/*    display: inline;*/
     padding: 6px 8px 6px 35px;
     margin-right: 5px;
     margin-top: -5px;
@@ -55,10 +50,8 @@ h1>a.edit {
     box-shadow: 0px 0px 4px #999999;
     border-radius: 2px;
     padding: 8px;
-    background: -webkit-linear-gradient(#870042 , #6C0035); /* For Safari */
-    background: -o-linear-gradient(#870042, #6C0035); /* For Opera 11.1 to 12.0 */
-    background: -moz-linear-gradient(#870042, #6C0035); /* For Firefox 3.6 to 15 */
-    background: linear-gradient(#870042, #6C0035); /* Standard syntax */
+    background: -webkit-linear-gradient(#870042 , #6C0035);
+    background: linear-gradient(#870042, #6C0035);
 }
 
 .subtitle {
@@ -90,15 +83,12 @@ a:active {
     float: left;
     font-family: Arial,Helvetica,sans-serif;
     position: static;
-    background: -webkit-linear-gradient(#fefefe , #f1f1f1); /* For Safari */
-    background: -o-linear-gradient(#fefefe, #f1f1f1); /* For Opera 11.1 to 12.0 */
-    background: -moz-linear-gradient(#fefefe, #f1f1f1); /* For Firefox 3.6 to 15 */
-    background: linear-gradient(#fefefe , #f1f1f1); /* Standard syntax */
+    background: -webkit-linear-gradient(#fefefe , #f1f1f1);
+    background: linear-gradient(#fefefe , #f1f1f1);
     box-shadow: 0px 0px 4px #cccccc;
     border-radius: 2px;
     width: 100%;
 }
-
 
 .header>h1 {
     margin-top: 32px;
@@ -136,8 +126,6 @@ h3 {
 .menu a:hover {
     text-decoration: none;
     background: -webkit-linear-gradient(#f2f2f2 , #d8d8d8);
-    background: -o-linear-gradient(#f2f2f2, #d8d8d8);
-    background: -moz-linear-gradient(#f2f2f2, #d8d8d8);
     background: linear-gradient(#f2f2f2, #d8d8d8);
 }
 
@@ -225,7 +213,6 @@ div.page {
     padding: 10px;
     margin: 20px 0px;
     font-size: 100%;
-/*    font-weight: bold;*/
 }
 
 div.page>.userComment {
@@ -236,7 +223,6 @@ div.page p.comment:after {
     content: " (" counter(commentscount) ")";
 }
 
-/*div.page>hr , div.page>hr:first-of-type~*:not(.comment) { */
 div.page>.userComment, div.page>#commentsHeading, div.page>.commentsHeading {
     visibility: hidden;
     position: absolute;
@@ -293,9 +279,8 @@ div.page>.userComment, div.page>#commentsHeading, div.page>.commentsHeading {
 }
 
 pre {
-    white-space: pre-wrap;       /* CSS 3 */
-    white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
-    white-space: -pre-wrap;      /* Opera 4-6 */
-    white-space: -o-pre-wrap;    /* Opera 7 */
-    word-wrap: break-word;       /* Internet Explorer 5.5+ */
+    white-space: pre-wrap;
+    white-space: -moz-pre-wrap;
+    white-space: -o-pre-wrap;
+    word-wrap: break-word;
 }
