@@ -15,11 +15,9 @@
 
 use strict;
 
-package OddMuse;
-
 AddModuleDescription('new-window.pl', 'New Window Links Extension');
 
-use vars qw($q @MyRules $FullUrlPattern $UrlProtocols $BracketText);
+our ($q, @MyRules, $FullUrlPattern, $UrlProtocols, $BracketText);
 
 # Opening links in new windows is evil
 push(@MyRules, \&NewWindowLink);

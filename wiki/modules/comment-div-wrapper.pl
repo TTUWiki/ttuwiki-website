@@ -15,11 +15,9 @@
 
 use strict;
 
-package OddMuse;
-
 AddModuleDescription('comment-div-wrapper.pl', 'Comment Div Wrapper Extension');
 
-use vars qw($q $bol $OpenPageName @MyRules %RuleOrder $CommentsPrefix $CommentsPattern $FS);
+our ($q, $bol, $OpenPageName, @MyRules, %RuleOrder, $CommentsPrefix, $CommentsPattern, $FS);
 my $CommentDiv = 0;
 push(@MyRules, \&CommentDivWrapper);
 $RuleOrder{\&CommentDivWrapper} = -50;
@@ -43,8 +41,8 @@ sub CommentDivWrapper {
 }
 
 # close final div
-*OldCommentDivApplyRules = *ApplyRules;
-*ApplyRules = *NewCommentDivApplyRules;
+*OldCommentDivApplyRules = \&ApplyRules;
+*ApplyRules = \&NewCommentDivApplyRules;
 
 sub NewCommentDivApplyRules {
   my ($blocks, $flags) = OldCommentDivApplyRules(@_);

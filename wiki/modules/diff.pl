@@ -15,11 +15,9 @@
 
 use strict;
 
-package OddMuse;
-
 AddModuleDescription('diff.pl', 'Diff Action Extension');
 
-use vars qw($q %Action @IndexList @MyRules $TempDir);
+our ($q, %Action, @IndexList, @MyRules, $TempDir);
 push(@MyRules, \&DiffActionRule);
 $Action{pagediff} = \&DoDiffAction;
 

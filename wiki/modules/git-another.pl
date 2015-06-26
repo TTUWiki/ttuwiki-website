@@ -15,15 +15,13 @@
 
 use strict;
 
-package OddMuse;
-
 AddModuleDescription('git-another.pl', 'Another Git Extension');
 
 use Cwd;
 use Capture::Tiny ':all';
 
-use vars qw(%Page $DataDir $FootnoteNumber);
-use vars qw($GitBinary $GitMail);
+our (%Page, $DataDir, $FootnoteNumber);
+our ($GitBinary, $GitMail);
 
 $GitBinary = 'git';
 $GitMail = 'unknown@oddmuse.org';
@@ -60,8 +58,8 @@ sub RenderHtmlCacheWithoutPrinting { # requires an open page
   }
 }
 
-*GitOldSave = *Save;
-*Save = *GitNewSave;
+*GitOldSave = \&Save;
+*Save = \&GitNewSave;
 
 sub GitNewSave {
   GitInitRepository();

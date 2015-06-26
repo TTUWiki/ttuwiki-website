@@ -14,11 +14,9 @@ smarttitles is easily installable: move this file into the B<wiki/modules/>
 directory of your Oddmuse Wiki.
 
 =cut
-package OddMuse;
-
 AddModuleDescription('smarttitles.pl', 'Smarttitles Extension');
 
-use vars qw(%Page $SiteName @MyRules %RuleOrder);
+our (%Page, $SiteName, @MyRules, %RuleOrder);
 
 # ....................{ CONFIGURATION                      }....................
 
@@ -28,8 +26,8 @@ smarttitles is easily configurable; set these variables in the B<wiki/config.pl>
 file for your Oddmuse Wiki.
 
 =cut
-use vars qw($SmartTitlesBrowserTitle
-            $SmartTitlesBrowserTitleWithoutSubtitle
+our ($SmartTitlesBrowserTitle,
+            $SmartTitlesBrowserTitleWithoutSubtitle,
             $SmartTitlesSubUrlText);
 
 =head2 $SmartTitlesBrowserTitle
@@ -100,8 +98,8 @@ sub SmartTitlesRule {
 }
 
 # ....................{ FUNCTIONS                          }....................
-*GetHeaderSmartTitlesOld = *GetHeader;
-*GetHeader =               *GetHeaderSmartTitles;
+*GetHeaderSmartTitlesOld = \&GetHeader;
+*GetHeader =               \&GetHeaderSmartTitles;
 
 =head2 GetSmartTitles
 
@@ -113,9 +111,9 @@ extensions (namely, hibernal) to obtain the title and subtitle for pages.
 
 =cut
 sub GetSmartTitles {
-  my ($title)    = $Page{text} =~ m/(?:^|\n)\#TITLE[ \t]+(.*?)\s*\n+/c;
-  my ($subtitle) = $Page{text} =~ m/(?:^|\n)\#SUBTITLE[ \t]+(.*?)\s*\n+/c;
-  my ($interlink, $suburl) = $Page{text} =~ m/(?:^|\n)\#SUBURL(:)?[ \t]+(.*?)\s*\n+/c;
+  my ($title)    = $Page{text} =~ m/(?:^|\n)\#TITLE[ \t]+(.*?)\s*\n+/;
+  my ($subtitle) = $Page{text} =~ m/(?:^|\n)\#SUBTITLE[ \t]+(.*?)\s*\n+/;
+  my ($interlink, $suburl) = $Page{text} =~ m/(?:^|\n)\#SUBURL(:)?[ \t]+(.*?)\s*\n+/;
   return ($title, $subtitle, $suburl, $interlink ? 1 : '');
 }
 
