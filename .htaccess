@@ -7,3 +7,5 @@ RewriteRule ^([^/]+)$ /cgi-bin/wiki.pl/$1 [QSA,L]
 
 # Otherwise, do a plain redirect.
 RewriteRule ^$ cgi-bin/wiki.pl [QSA,L,PT]
+
+SetEnv WikiDataDir ../wiki
