@@ -20,7 +20,7 @@ form.search {
 
 form.search input[type="text"] {
     background: #FCFCFC;
-    border: 1px solid #D1D1D1;
+    /*border: 1px solid #D1D1D1;*/
     font: bold 12px Arial,Helvetica,Sans-serif;
     color: #BEBEBE;
     width: 170px;
@@ -46,12 +46,21 @@ h1>a.edit {
     text-decoration: none;
     font-size: 50%;
     font-weight: normal;
-    color: #DDDDDD;
+    color: #FAFAFA;
     box-shadow: 0px 0px 4px #999999;
     border-radius: 2px;
     padding: 8px;
-    background: -webkit-linear-gradient(#870042 , #6C0035);
-    background: linear-gradient(#870042, #6C0035);
+    background-color: #594;
+    background-image: linear-gradient(#6D5, #594);
+    border: 1px solid;
+    border-color: #593;
+    font-weight: bold;
+}
+
+h1>a.edit:hover {
+    background-color: #483;
+    background-image: linear-gradient(#5C4, #483);
+    border-color: #482;
 }
 
 .subtitle {
