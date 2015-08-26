@@ -19,6 +19,8 @@ $RCName = 'Последние изменения';
 @UserGotoBarPages = ($HomePage, 'Расписания', 'Полезное', $AskPage, $RCName); # not required anymore?
 #$SurgeProtection = '';
 $SurgeProtectionViews = 20;
+@RcDays = (7, 30, 90);
+$RcDefault = 90;
 
 $GitMail = 'anybody@ttuwiki.org';
 
