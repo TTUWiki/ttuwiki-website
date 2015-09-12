@@ -98,3 +98,68 @@ sub NewQuestionaskerException {
   return 1 if Geo::IP->new()->country_code_by_addr($ENV{REMOTE_ADDR}) eq 'EE';
   return OldQuestionaskerException(@_);
 }
+
+sub DoSearch {
+  my $string = shift || GetParam('search', '');
+  my $re = UnquoteHtml($string);
+  return DoIndex() if $string eq '';
+  eval { qr/$re/ }
+    or $@ and ReportError(Ts('Malformed regular expression in %s', $string),
+			  '400 BAD REQUEST');
+  my $replacement = GetParam('replace', undef);
+  my $raw = GetParam('raw', '');
+  my @results;
+  if ($replacement or GetParam('delete', 0)) {
+    return unless UserIsAdminOrError();
+    print GetHeader('', Ts('Replaced: %s', $string . " &#x2192; " . $replacement)),
+      $q->start_div({-class=>'content replacement'});
+    @results = Replace($re, UnquoteHtml($replacement));
+    foreach (@results) {
+      PrintSearchResult($_, $replacement || $re);
+    }
+  } else {
+    if ($raw) {
+      print GetHttpHeader('text/plain');
+      print RcTextItem('title', Ts('Search for: %s', $string)), RcTextItem('date', TimeToText($Now)),
+	RcTextItem('link', $q->url(-path_info=>1, -query=>1)), "\n" if GetParam('context', 1);
+    } else {
+      print GetHeader('', Ts('Search for: %s', $string)), $q->start_div({-class=>'content search'});
+      print $q->p({-class=>'links'}, SearchMenu($string));
+      PrintQuickSearch($re); # CUSTOM
+    }
+    @results = SearchTitleAndBody($re, \&PrintSearchResult, SearchRegexp($re));
+  }
+  print SearchResultCount($#results + 1), $q->end_div() unless $raw;
+  PrintFooter() unless $raw;
+}
+
+sub PrintQuickSearch {
+  my ($re) = @_;
+  my $courses = join $q->br(), GetQuickSearchResults("$DataDir/course-index", $re);
+  if ($courses) {
+    print $q->h2('Õppeained');
+    print $courses;
+  }
+  my $kavad   = join $q->br(), GetQuickSearchResults("$DataDir/kava-index", $re);
+  if ($kavad) {
+    print $q->h2('Õppekavad');
+    print $kavad;
+  }
+  print $q->h2('Pages') if $courses or $kavad;
+}
+
+sub GetQuickSearchResults {
+  my ($filename, $re) = @_;
+  open my $file, $filename or return; # ignore non-existent files
+  my @results = ();
+  while (my $line = <$file>) {
+    utf8::decode($line);
+    if ($line =~ m/$re/i) {
+      my ($link) = split(' - ', $line);
+      $link =~ s!/!-!g;
+      push @results, GetPageLink($link, $line);
+    }
+  }
+  close $file;
+  return @results;
+}
