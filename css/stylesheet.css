@@ -279,17 +279,25 @@ div.page>.userComment, div.page>#commentsHeading, div.page>.commentsHeading {
     height: 175px;
 }
 
+img.upload {
+		max-width: 100%;
+}
+
+.content {
+		overflow: hidden;
+}
+
 .left {
-    float:left;
+    float: left;
 }
 
 .right {
-    float:right;
+    float: right;
 }
 
-.right img {
+.right img, .left img {
     width: 300px;
-    padding: 20px;
+    padding: 0px 20px 20px 20px;
 }
 
 pre {
