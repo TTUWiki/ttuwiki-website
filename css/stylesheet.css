@@ -280,11 +280,11 @@ div.page>.userComment, div.page>#commentsHeading, div.page>.commentsHeading {
 }
 
 img.upload {
-		max-width: 100%;
+    max-width: 100%;
 }
 
 .content {
-		overflow: hidden;
+    overflow: hidden;
 }
 
 .left {
