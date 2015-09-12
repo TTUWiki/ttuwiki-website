@@ -194,6 +194,11 @@ a.number {
     vertical-align: top;
 }
 
+h2 .Kava, .subtitle .Course {
+    font-size: 55%;
+    vertical-align: top;
+}
+
 li {
     margin: 4px 0px;
 }
