@@ -36,8 +36,8 @@ $Translate{'Upload'} = 'Загрузить';
 $Translate{'Journal'} = ' ';
 $Translate{'Comments:'} = 'Комментарии:';
 
-$FullUrl = ($ENV{'HTTPS'} ? 'https' : 'http') . '://ttuwiki.org';
-$ScriptName = ($ENV{'HTTPS'} ? 'https' : 'http') . '://ttuwiki.org';
+$FullUrl = ($ENV{'HTTPS'} ? 'https' : 'http') . '://ttuwiki.ee';
+$ScriptName = ($ENV{'HTTPS'} ? 'https' : 'http') . '://ttuwiki.ee';
 
 $CreoleLineBreaks = 1;
 $CreoleTableCellsAllowBlockLevelElements = 1;
