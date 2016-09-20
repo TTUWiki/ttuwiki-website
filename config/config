@@ -21,13 +21,12 @@ $SurgeProtectionViews = 20;
 @RcDays = (7, 30, 90);
 $RcDefault = 90;
 
-$GitMail = 'anybody@ttuwiki.org';
 
-
+$GitMail = 'anybody@ttuwiki.ee';
 
 $Translate{'Journal'} = ' ';
 
-$FullUrl = ($ENV{'HTTPS'} ? 'https' : 'http') . '://ttuwiki.ee';
+$FullUrl    = ($ENV{'HTTPS'} ? 'https' : 'http') . '://ttuwiki.ee';
 $ScriptName = ($ENV{'HTTPS'} ? 'https' : 'http') . '://ttuwiki.ee';
 
 $CreoleLineBreaks = 1;
@@ -62,7 +61,7 @@ sub GetSearchForm {
   }
     return GetFormStart(undef, 'get', 'search')
         . $form . #$q->submit('dosearch', T('Go!')) .
-        $q->endform;
+        $q->end_form;
 }
 
 sub GetHeaderTitle {
@@ -81,11 +80,10 @@ sub PrintPageCommentsLink {
   ['Please type here the name of our university (three letters)' => sub { shift =~ /TT[UuÜü]|[Тт][Тт][Уу]|TUT/i }] # XXX will /i handle non-ascii characters here?
 );
 
-use Geo::IP;
-
 *OldQuestionaskerException = *QuestionaskerException;
 *QuestionaskerException = *NewQuestionaskerException;
 sub NewQuestionaskerException {
+  use Geo::IP;
   return 1 if Geo::IP->new()->country_code_by_addr($ENV{REMOTE_ADDR}) eq 'EE';
   return OldQuestionaskerException(@_);
 }
