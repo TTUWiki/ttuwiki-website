@@ -14,9 +14,8 @@ $CommentsPattern = "^(?|Комментарии_на_(.*)|.*)\$";
 $EditAllowed = 1;
 $StyleSheet = '/css/stylesheet.css';
 $MaxPost = 430080;
-$HomePage = 'Главная';
-$RCName = 'Последние изменения';
-@UserGotoBarPages = ($HomePage, 'Расписания', 'Полезное', $AskPage, $RCName); # not required anymore?
+$HomePage = 'Home';
+$RCName = 'Recent Changes';
 #$SurgeProtection = '';
 $SurgeProtectionViews = 20;
 @RcDays = (7, 30, 90);
@@ -24,17 +23,9 @@ $RcDefault = 90;
 
 $GitMail = 'anybody@ttuwiki.org';
 
-$AskPage = 'Задать_вопрос';
-$QuestionPage = 'Вопрос_';
-$NewQuestion = 'Ваш вопрос:';
 
-$NewText = "Эта страница пуста.\n";
-$NewComment = "Ваш комментарий:";
 
-$Translate{'Attach file:'} = 'Прикрепить файл:';
-$Translate{'Upload'} = 'Загрузить';
 $Translate{'Journal'} = ' ';
-$Translate{'Comments:'} = 'Комментарии:';
 
 $FullUrl = ($ENV{'HTTPS'} ? 'https' : 'http') . '://ttuwiki.ee';
 $ScriptName = ($ENV{'HTTPS'} ? 'https' : 'http') . '://ttuwiki.ee';
@@ -57,7 +48,7 @@ $Translate{'Search:'} = ' ';
 $Translate{'Go!'} = 'Search';
 sub GetSearchForm {
     my $form = # $q->label({-for=>'search'}, '') . ''
-      $q->textfield(-name=>'search', -id=>'search', -size=>20, -placeholder=>'Поиск...',
+      $q->textfield(-name=>'search', -id=>'search', -size=>20,
                     -accesskey=>T('f')) . '';
     if ($ReplaceForm) {
         $form .= $q->label({-for=>'replace'}, T('Replace:')) . ' '
@@ -87,7 +78,7 @@ sub PrintPageCommentsLink {
 }
 
 @QuestionaskerQuestions = (
-  ['О каком университете этот сайт? Напишите три буквы.' => sub { shift =~ /TT[UuÜü]|[Тт][Тт][Уу]/i }] # XXX will /i handle non-ascii characters here?
+  ['Please type here the name of our university (three letters)' => sub { shift =~ /TT[UuÜü]|[Тт][Тт][Уу]|TUT/i }] # XXX will /i handle non-ascii characters here?
 );
 
 use Geo::IP;
@@ -137,12 +128,12 @@ sub PrintQuickSearch {
   my ($re) = @_;
   my $courses = join $q->br(), GetQuickSearchResults("$DataDir/course-index", $re);
   if ($courses) {
-    print $q->h2('Õppeained');
+    print $q->h2('Courses');
     print $courses;
   }
   my $kavad   = join $q->br(), GetQuickSearchResults("$DataDir/kava-index", $re);
   if ($kavad) {
-    print $q->h2('Õppekavad');
+    print $q->h2('Studying Programmes');
     print $kavad;
   }
   print $q->h2('Pages') if $courses or $kavad;
