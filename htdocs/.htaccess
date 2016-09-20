@@ -2,6 +2,9 @@ Options -Indexes
 
 RewriteEngine On
 # If there's no query string, change the page name part into a query.
+RewriteCond %{REQUEST_URI} ^(/download)
+RewriteRule ^download/([^/]+)$ /cgi-bin/wiki.pl?action=download&id=$1 [QSA,L]
+
 RewriteCond %{QUERY_STRING} ^$
 RewriteRule ^([^/]+)$ /cgi-bin/wiki.pl/$1 [QSA,L]
 

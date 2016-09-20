@@ -21,6 +21,7 @@ $SurgeProtectionViews = 20;
 @RcDays = (7, 30, 90);
 $RcDefault = 90;
 
+$UploadAllowed = 1;
 $UseCache = 0; # TODO
 
 $GitMail = 'anybody@ttuwiki.ee';
