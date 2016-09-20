@@ -38,23 +38,6 @@ sub GotobarInit {
         @UserGotoBarPages = ();
         $UserGotoBar = '';
         my $count = 0;
-        while ($Page{text} =~ m/($LinkPattern|\[\[$FreeLinkPattern\]\]|\[\[$FreeLinkPattern\|([^\]]+)\]\]|\[$InterLinkPattern\s+([^\]]+?)\])/og) {
-            my $page = $2||$3||$4||$6;
-            my $text = $5||$7;
-            #$UserGotoBar .= ' ' if $UserGotoBar;
-            if ($6) {
-                $UserGotoBar .= GetInterLink($page, $text);
-            } else {
-                $UserGotoBar .= GetPageLink($page, $text);
-                # The first local page is the homepage, the second local page
-                # is the list of recent changes.
-                $count++;
-                if ($count == 1) {
-                    #$HomePage = FreeToNormal($page);
-                } elsif ($count == 2) {
-                    #$RCName = FreeToNormal($page);
-                }
-            }
-        }
+        $UserGotoBar = ToString(sub { ApplyRules($Page{text}, 1, 1) });
     }
 }
