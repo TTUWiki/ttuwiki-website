@@ -32,7 +32,7 @@ sub CommentDivWrapper {
   }
   if ($OpenPageName =~ /$CommentsPattern/) {
     if ($bol and m/\G(\s*\n)*----+[ \t]*\n?/cg) {
-      my $html = CloseHtmlEnvironments()
+      my $html = CloseHtmlEnvironments() . TranslatableClose() # CUSTOM
 	  . ($CommentDiv++ > 0 ? $q->end_div() : $q->h2({-class=>'commentsHeading'}, T('Comments:'))) . $q->start_div({-class=>'userComment'})
 	  . AddHtmlEnvironment('p');
       return $html;
