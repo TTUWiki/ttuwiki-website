@@ -397,15 +397,19 @@ sub Clean {
 }
 
 sub Dirty { # arg 1 is the raw text; the real output must be printed instead
+  FinishFragment();
+  push(@Blocks, shift);
+  push(@Flags, 1);
+}
+
+sub FinishFragment {
   if ($Fragment ne '') {
     $Fragment =~ s|<p>\s*</p>||g; # clean up extra paragraphs (see end of ApplyRules)
     print $Fragment;
     push(@Blocks, $Fragment);
     push(@Flags, 0);
+    $Fragment = '';
   }
-  push(@Blocks, shift);
-  push(@Flags, 1);
-  $Fragment = '';
 }
 
 sub ApplyRules {
@@ -521,12 +525,7 @@ sub ApplyRules {
   }
   pos = length $_;  # notify module functions we've completed rule handling
   Clean(CloseHtmlEnvironments());  # last block -- close it, cache it
-  if ($Fragment ne '') {
-    $Fragment =~ s|<p>\s*</p>||g; # clean up extra paragraphs (see end Dirty())
-    print $Fragment;
-    push(@Blocks, $Fragment);
-    push(@Flags, 0);
-  }
+  FinishFragment();
   # this can be stored in the page cache -- see PrintCache
   return (join($FS, @Blocks), join($FS, @Flags));
 }
