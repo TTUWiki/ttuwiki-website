@@ -5,7 +5,7 @@ package OddMuse;
 use Digest::SHA qw(sha256_hex);
 $PassHashFunction = 'sha256_hex';
 $PassSalt = '0c5bc418b2009ab13b2cf1d5b4a46b0882cf4f60a77b09373ef5c9af26f67500';
-$AdminPass = '6a6f03729f9b663882242c72e26301410cdc8671b9269dbfd40450c5e6dfeb6d';
+$AdminPass = 'f1bc9caa7bcd30c91a3c4845aa8ac56ea6c47359c24be5b5415f1216fdeafa4d';
 
 $SiteName  = "TTÜWiki";
 
