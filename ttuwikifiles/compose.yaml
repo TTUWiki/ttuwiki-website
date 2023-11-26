@@ -1,13 +1,13 @@
 version: "3.7"
 
 services:
-  backend:
-    image: postmodern.alexdaniel.org/ttuwiki-backend:latest
+  backend-files:
+    image: postmodern.alexdaniel.org/ttuwiki-backend-files:latest
     build:
       context: .
     volumes:
-      - /home/ttuwiki/data/ttuwiki/data:/srv/data
-      - /home/ttuwiki/data/ttuwiki/logs:/srv/logs
+      - /home/ttuwiki/data/ttuwikifiles/data:/srv/data
+      - /home/ttuwiki/data/ttuwikifiles/logs:/srv/logs
     networks:
       - caddy
     deploy:
@@ -18,7 +18,7 @@ services:
         order: start-first
 
       labels:
-        caddy: ttuwiki.org, www.ttuwiki.org, ttuwiki.ee, www.ttuwiki.ee
+        caddy: files.ttuwiki.org, www.files.ttuwiki.org, files.ttuwiki.ee, www.files.ttuwiki.ee
         caddy.tls: alex.jakimenko+caddy@gmail.com
         caddy.reverse_proxy: "{{upstreams 80}}"
 

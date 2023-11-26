@@ -1,0 +1,8 @@
+Options -Indexes
+
+RewriteEngine On
+
+RewriteCond %{QUERY_STRING} ^$
+RewriteRule ^([^/]+)$ /upload/$1 [QSA,L]
+
+RewriteRule ^$ https://ttuwiki.ee [R=301,L]
