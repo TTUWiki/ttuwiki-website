@@ -28,10 +28,8 @@ $GitMail = 'anybody@ttuwiki.ee';
 
 $Translate{'Journal'} = ' ';
 
-#$FullUrl    = ($ENV{'HTTPS'} ? 'https' : 'http') . '://ttuwiki.ee';
-#$ScriptName = ($ENV{'HTTPS'} ? 'https' : 'http') . '://ttuwiki.ee';
-$FullUrl    = 'https://ttuwiki.org';
-$ScriptName = 'https://ttuwiki.org';
+$FullUrl    = 'https://ttuwiki.ee';
+$ScriptName = 'https://ttuwiki.ee';
 
 $CreoleLineBreaks = 1;
 $CreoleTableCellsAllowBlockLevelElements = 1;
